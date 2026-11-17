@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>lookOn privacy policy</title>
+<style>
+  :root{--ink:#1f1d26;--muted:#6b6878;--line:#e4e2ea;--lens:#5b3fd6}
+  body{margin:0;font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;color:var(--ink);background:#fff}
+  main{max-width:720px;margin:0 auto;padding:48px 22px 80px}
+  h1{font-size:32px;line-height:1.2;margin:0 0 6px}
+  h2{font-size:20px;margin:36px 0 8px}
+  p,li{max-width:68ch}
+  .muted{color:var(--muted)}
+  a{color:var(--lens)}
+  table{border-collapse:collapse;width:100%;font-size:15px;margin:10px 0}
+  th,td{text-align:left;vertical-align:top;border-top:1px solid var(--line);padding:10px 8px}
+  th{font-weight:600}
+</style>
+</head>
+<body>
+<main>
+  <h1>lookOn privacy policy</h1>
+  <p class="muted">Last updated: {{UPDATED}}</p>
+
+  <p>lookOn is a Shopify app made by {{COMPANY}}. It lets shoppers preview a product on a photo of themselves. This policy explains what lookOn collects when a store installs it and when a shopper uses it, why, and what happens to that information.</p>
+
+  <h2>Shopper photos</h2>
+  <p>When a shopper uploads a photo or takes a selfie, lookOn sends it, with the product photo, to a third-party AI image service to create the preview. <strong>lookOn does not store the photo or the preview.</strong> Both are handled in memory, sent back to the shopper's browser and then discarded. Before uploading, the shopper confirms the photo is of them and that they are 18 or over.</p>
+  <p>The AI image service processes the photo under its own terms. Shoppers and stores can ask us which service is used at any time.</p>
+
+  <h2>What lookOn keeps</h2>
+  <table>
+    <tr><th>From the store</th><td>The store's Shopify address, an access token to read products (stored encrypted), product titles, types, tags, photos and variants, the store's lookOn settings and wording, credit balance, and the history of credit purchases.</td></tr>
+    <tr><th>From store staff</th><td>The name and email of the staff member who opens lookOn in Shopify admin, used to identify the account.</td></tr>
+    <tr><th>From shoppers</th><td>For each try-on: the product, the time, whether it worked, the device type (phone, tablet or computer), the country, and a random browser ID. If the store asks shoppers for an email, or the shopper is signed in to the store, the email or Shopify customer ID is kept so the store's try-on limits work. Whether the shopper agreed to receive offers is kept if the store asks.</td></tr>
+    <tr><th>Never kept</th><td>Shopper photos, previews, card or payment details (payments are handled by Shopify, Stripe or Razorpay).</td></tr>
+  </table>
+
+  <h2>Why</h2>
+  <ul>
+    <li>To make previews of the store's products.</li>
+    <li>To count and limit try-ons as the store chooses (free try-ons, a limit per product or per day).</li>
+    <li>To show the store its try-on activity and the emails shoppers chose to share with it.</li>
+    <li>To charge credits and keep billing records.</li>
+    <li>To keep the service secure and working.</li>
+  </ul>
+  <p>lookOn does not sell personal information or use it for advertising. Shopper emails belong to the store that collected them; lookOn does not contact shoppers.</p>
+
+  <h2>Who it is shared with</h2>
+  <p>Only with the services needed to run lookOn: the AI image service (photos, briefly, as described above), our hosting and database providers, and the payment provider the store chooses. Each processes the data only to provide its service to us.</p>
+
+  <h2>How long it is kept, and deleting it</h2>
+  <ul>
+    <li>When a store uninstalls lookOn, its access token is removed straight away. Shopify then asks us to delete the store's data, and we delete the store, its products, its try-on activity and its shoppers' emails. Billing records are kept for as long as tax and accounting law requires.</li>
+    <li>When a shopper asks the store to delete their data, Shopify tells us and we remove their email and customer ID from lookOn. Their try-ons remain only as anonymous counts.</li>
+    <li>A shopper or store can also write to us at the address below to ask what we hold, or to have it corrected or deleted.</li>
+  </ul>
+
+  <h2>Security</h2>
+  <p>Connections use HTTPS. Store access tokens and payment keys are stored encrypted. Access to the platform's admin is limited to {{COMPANY}} staff who need it.</p>
+
+  <h2>Changes</h2>
+  <p>If this policy changes, the date at the top changes too. Important changes are shown to stores in the app.</p>
+
+  <h2>Contact</h2>
+  <p>{{COMPANY}}<br>Email: <a href="mailto:{{EMAIL}}">{{EMAIL}}</a></p>
+</main>
+</body>
+</html>
