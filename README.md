@@ -1,4 +1,4 @@
-# lookOn: virtual try-on for Shopify
+# lookveya: virtual try-on for Shopify
 
 Shoppers see a product (earrings, glasses, hats, hair, watches…) on their own photo, made by AI. Stores pay with prepaid credits.
 
@@ -6,7 +6,7 @@ Shoppers see a product (earrings, glasses, hats, hair, watches…) on their own 
 | Part | Where | Who |
 | --- | --- | --- |
 | **Try-on block** | Product pages (theme app embed) | Shoppers |
-| **Merchant admin** | Shopify admin > Apps > lookOn (`/app`) | Each store: credits, texts, product mapping, settings |
+| **Merchant admin** | Shopify admin > Apps > lookveya (`/app`) | Each store: credits, texts, product mapping, settings |
 | **Super admin** | `/panel` on your server | You: all stores, pricing, payment keys, revenue |
 
 ## Credits and payments
@@ -38,7 +38,7 @@ Shoppers see a product (earrings, glasses, hats, hair, watches…) on their own 
 | --- | --- | --- |
 | **Shopify Billing** | One-time charge on the merchant's Shopify bill (`appPurchaseOneTimeCreate`). | Switch on in the panel. Test mode makes test charges; live mode makes real ones. |
 | **Stripe** | Stripe Checkout page; credits added by the return page and the webhook. | Test and live secret keys + webhook secrets in the panel; webhook `APP_URL/webhooks/stripe` for `checkout.session.completed` and `checkout.session.expired`. |
-| **Razorpay** | Hosted lookOn pay page with Razorpay Checkout; payment signature verified. | Key ID, key secret, webhook secret in the panel; webhook `APP_URL/webhooks/razorpay` for `order.paid` and `payment.failed`. |
+| **Razorpay** | Hosted lookveya pay page with Razorpay Checkout; payment signature verified. | Key ID, key secret, webhook secret in the panel; webhook `APP_URL/webhooks/razorpay` for `order.paid` and `payment.failed`. |
 
 **Important (Shopify rule):** apps listed on the Shopify App Store must charge through Shopify Billing. Tick **"Listed on the Shopify App Store"** in the panel and only Shopify Billing is offered. Stripe and Razorpay are for stores you install directly (unlisted app or custom app). A payment is credited exactly once, whether the webhook or the return page confirms it first.
 
@@ -46,7 +46,7 @@ Shoppers see a product (earrings, glasses, hats, hair, watches…) on their own 
 - **Credits**: balance, ≈ try-ons left, add credits with a live "you pay / you get" preview, payment and credit history, low/empty banners.
 - **Texts**: every line the shopper sees (heading, buttons, consent, progress and error messages, photo-check messages, out-of-credits text). Blank = default.
 - **Products**: map each Shopify *product type* to a try-on type (e.g. "Jhumka" → earrings), or set one product's type, or mark it "Not try-on"; switch the block on/off per product. Order used: metafield `custom.tryon_category` → product choice → product-type rule → automatic detection (type, tags, title; optional photo recognition) → optional general preview.
-- **Settings**: what happens at zero credit (message or hide); general preview for products lookOn cannot recognise (off by default).
+- **Settings**: what happens at zero credit (message or hide); general preview for products lookveya cannot recognise (off by default).
 
 
 Works for **any Shopify store and any wearable product**: wigs and hair, hats, beards, glasses, earrings, necklaces, headbands, scarves, makeup shades. Nothing is typed in by hand.
@@ -107,14 +107,14 @@ Needs Node 20.12+. It keeps its data in `data/db.json`, so host it where files p
 If you set only one engine's keys you do not need `TRYON_ENGINE`.
 
 ### 2. One store only (fastest)
-You still create a (free) Shopify app, because the product-page block is a theme *app* extension and that is how Shopify delivers it to your theme. But the server does **not** need the Shopify keys: leave `SHOPIFY_*` unset, set `ALLOWED_SHOPS=your-store.myshopify.com`, and the server reads your products from the public storefront. Steps: create the app, put its `client_id` and your server URL in `shopify-app/shopify.app.toml` and the server URL in the block file, run `npx shopify app deploy`, install the app on your store, then add **lookOn try-on** to the product page in the theme editor (Add block > Apps).
+You still create a (free) Shopify app, because the product-page block is a theme *app* extension and that is how Shopify delivers it to your theme. But the server does **not** need the Shopify keys: leave `SHOPIFY_*` unset, set `ALLOWED_SHOPS=your-store.myshopify.com`, and the server reads your products from the public storefront. Steps: create the app, put its `client_id` and your server URL in `shopify-app/shopify.app.toml` and the server URL in the block file, run `npx shopify app deploy`, install the app on your store, then add **lookveya try-on** to the product page in the theme editor (Add block > Apps).
 
 ### 3. Many stores (a real Shopify app)
 1. Create the app in the Shopify Dev Dashboard. Put its `client_id` and your server URL in `shopify-app/shopify.app.toml`.
 2. Set `SHOPIFY_API_KEY`, `SHOPIFY_API_SECRET`, `APP_URL` on the server.
 3. In `shopify-app/extensions/product-tryon/blocks/product-tryon.liquid`, replace `https://YOUR-TRYON-SERVER.example.com` with your server URL once, so merchants never type it.
 4. `npx shopify app deploy`, then install the app on a store. Install registers the store, saves its (encrypted) token, subscribes to product webhooks and pulls the whole catalogue.
-5. The merchant adds **lookOn try-on** to the product template in the theme editor.
+5. The merchant adds **lookveya try-on** to the product template in the theme editor.
 
 Only stores that installed the app can use the server when the Shopify app is configured.
 

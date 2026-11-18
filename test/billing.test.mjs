@@ -7,8 +7,8 @@ import { quote, pricingFor, withDefaults, economics, applySettingsUpdate, stripe
 
 const ENV = {
   TRYON_ENGINE: 'cloudflare', CF_ACCOUNT_ID: 'acct', CF_API_TOKEN: 'tok', RATE_PER_MINUTE: '50', DAILY_CAP_PER_SHOP: '100',
-  SHOPIFY_API_KEY: 'key', SHOPIFY_API_SECRET: 'sec', APP_URL: 'https://lookon.example.com', OPEN_SHOPS: '0',
-  SUPER_ADMIN_EMAIL: 'owner@lookon.test', SUPER_ADMIN_PASSWORD: 'a-very-long-password', PLATFORM_SESSION_SECRET: 'x'.repeat(40),
+  SHOPIFY_API_KEY: 'key', SHOPIFY_API_SECRET: 'sec', APP_URL: 'https://api.lookveya.example', OPEN_SHOPS: '0',
+  SUPER_ADMIN_EMAIL: 'owner@lookveya.test', SUPER_ADMIN_PASSWORD: 'a-very-long-password', PLATFORM_SESSION_SECRET: 'x'.repeat(40),
 };
 
 // Shopify App Bridge ID token (HS256 signed with the app secret).

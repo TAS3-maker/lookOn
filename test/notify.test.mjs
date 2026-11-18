@@ -12,7 +12,7 @@ function world() {
   const sent = [];
   const f = async (url, o) => { sent.push({ url, body: Object.fromEntries(o.body) }); return new Response(JSON.stringify({ sid: 'SM1' }), { status: 201 }); };
   const audits = [];
-  const n = createNotifier({ store, env, fetch: f, getSettings: async () => withDefaults(await store.getSettings()), audit: async (a, d) => audits.push({ a, ...d }), appUrl: 'https://lookonn.vercel.app' });
+  const n = createNotifier({ store, env, fetch: f, getSettings: async () => withDefaults(await store.getSettings()), audit: async (a, d) => audits.push({ a, ...d }), appUrl: 'https://api.lookveya.com' });
   return { store, sent, n, audits };
 }
 async function smsOn(store) {
@@ -72,7 +72,7 @@ test('usage report, Gemini balance estimate and the scheduler', async () => {
   const out = await n.run({ force: true });
   assert.equal(out.checked, true); assert.equal(out.summary, true);
   assert.ok(sent.some((x) => /Gemini balance about INR 990/.test(x.body.Body)));
-  assert.ok(sent.some((x) => /lookOn yesterday/.test(x.body.Body)));
+  assert.ok(sent.some((x) => /lookveya yesterday/.test(x.body.Body)));
   const again = await n.run();
   assert.equal(again.checked, false, 'not due yet'); assert.equal(again.summary, false, 'one summary a day');
 });

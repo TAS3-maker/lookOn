@@ -1,5 +1,5 @@
 {
-  "name": "lookon",
+  "name": "lookveya",
   "version": "1.0.0",
   "private": true,
   "description": "Virtual try-on for any Shopify store: wigs, hats, beards, glasses, jewellery and more. Reads the store's products and the shopper's selected variant automatically.",

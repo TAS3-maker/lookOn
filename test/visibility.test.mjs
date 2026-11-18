@@ -119,7 +119,7 @@ test('expiring offline tokens: token exchange asks for them, stores the refresh 
 });
 
 test('APP_URL pasted as …/app still gives correct payment links, and old /app/billing links redirect', async () => {
-  const t = await boot({ env: { ...ENV, APP_URL: ' https://lookonn.vercel.app/app/ ' } });
+  const t = await boot({ env: { ...ENV, APP_URL: ' https://api.lookveya.com/app/ ' } });
   const r = await fetch(t.base + '/app/billing/shopify/return?payment=abc&charge_id=1', { redirect: 'manual' });
   assert.equal(r.status, 307);
   assert.equal(r.headers.get('location'), '/billing/shopify/return?payment=abc&charge_id=1');

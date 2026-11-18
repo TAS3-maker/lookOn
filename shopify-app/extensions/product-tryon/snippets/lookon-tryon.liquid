@@ -1,15 +1,15 @@
 {%- comment -%}
-  lookOn try-on markup, shared by both blocks:
+  lookveya try-on markup, shared by both blocks:
     blocks/tryon-block.liquid   - app block: the merchant drags it anywhere on the product page (placement: 'manual')
     blocks/product-tryon.liquid - app embed: placed by the script next to Add to cart (placement: 'auto')
   Wording, in order of priority:
-    1. lines the merchant changed in Shopify admin > Apps > lookOn > Texts (the script swaps them in),
+    1. lines the merchant changed in Shopify admin > Apps > lookveya > Texts (the script swaps them in),
     2. the values set in the theme editor (marked data-theme-text, kept as they are),
-    3. lookOn's defaults (the button names the product's category; the photo hint fits the category).
+    3. lookveya's defaults (the button names the product's category; the photo hint fits the category).
   Optional: product metafield custom.tryon_category (single line text) forces a category, e.g. hat, hair, beard, glasses.
 {%- endcomment -%}
-{%- comment -%} The lookOn server. Change it here (and APP_URL on the server) if the app moves to another domain. {%- endcomment -%}
-{%- assign api = 'https://lookonn.vercel.app' -%}
+{%- comment -%} The lookveya server. Change it here (and APP_URL on the server) if the app moves to another domain. {%- endcomment -%}
+{%- assign api = 'https://api.lookveya.com' -%}
 <div class="ptn" id="ptn-{{ block.id }}" {{ block.shopify_attributes }}
   data-placement="{{ placement }}"
   data-position="{{ block.settings.position | default: 'before_cart' }}"
@@ -22,7 +22,8 @@
   data-customer-email="{{ customer.email | escape }}"
   data-login-url="{{ routes.account_login_url }}"
   style="--ptn-accent: {{ block.settings.accent }}; --ptn-scan: {{ block.settings.scan_color | default: '#5ee1ff' }};">
-  <h3 class="ptn-title" data-t="heading"{% if block.settings.heading != blank and block.settings.heading != 'Try it on' and block.settings.heading != 'lookOn' %} data-theme-text{% endif %}>{{ block.settings.heading | default: 'lookOn' | escape }}</h3>
+  {%- comment -%} 'lookOn' and 'Try it on' were earlier defaults: those blocks show the current name. {%- endcomment -%}
+  <h3 class="ptn-title" data-t="heading"{% if block.settings.heading != blank and block.settings.heading != 'Try it on' and block.settings.heading != 'lookOn' and block.settings.heading != 'lookveya' %} data-theme-text{% endif %}>{% if block.settings.heading != blank and block.settings.heading != 'Try it on' and block.settings.heading != 'lookOn' %}{{ block.settings.heading | escape }}{% else %}lookveya{% endif %}</h3>
   <p class="ptn-sub" data-t="subheading"{% if block.settings.subheading != blank %} data-theme-text{% endif %}>{{ block.settings.subheading | default: 'Add a front-facing photo to see this on you.' | escape }}</p>
   {%- if block.settings.photo_hint != blank and block.settings.photo_hint != 'Use a clear, front-facing photo with your whole head and shoulders in view.' %}
   <p class="ptn-hint" data-t="photoHint" data-theme-text>{{ block.settings.photo_hint | escape }}</p>

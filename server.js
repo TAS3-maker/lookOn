@@ -42,7 +42,7 @@ export async function createApp(opts = {}) {
 
   const API_KEY = cleanKey(env.SHOPIFY_API_KEY) || undefined;
   const API_SECRET = cleanKey(env.SHOPIFY_API_SECRET) || undefined;
-  // The server's own address, e.g. https://lookonn.vercel.app. A pasted value is often the app page itself
+  // The server's own address, e.g. https://api.lookveya.com. A pasted value is often the app page itself
   // (…/app) or has a trailing slash: both are trimmed, so payment return links never point to /app/billing/….
   const APP_URL = String(env.APP_URL || '').trim().replace(/\/+$/, '').replace(/\/app$/i, '');
   const HAS_APP = Boolean(API_KEY && API_SECRET && APP_URL);
@@ -132,10 +132,10 @@ export async function createApp(opts = {}) {
   const notInstalled = async (res, shop) => {
     const code = await shopBlockReason(shop);
     const hint = {
-      not_found: 'No record of this store. Check the address is the .myshopify.com one, and open lookOn once in the Shopify admin.',
-      disconnected: 'The store was disconnected (app uninstalled or its access stopped working). Open lookOn in the Shopify admin to reconnect.',
+      not_found: 'No record of this store. Check the address is the .myshopify.com one, and open lookveya once in the Shopify admin.',
+      disconnected: 'The store was disconnected (app uninstalled or its access stopped working). Open lookveya in the Shopify admin to reconnect.',
       account_inactive: 'The account this store belongs to is switched off in the super admin.',
-      not_linked: 'Open lookOn once in the Shopify admin to finish connecting the store.',
+      not_linked: 'Open lookveya once in the Shopify admin to finish connecting the store.',
     }[code];
     return res.status(403).json({ error: 'This store has not installed the try-on app.', code, hint });
   };
@@ -158,7 +158,7 @@ export async function createApp(opts = {}) {
     let id;
     try { id = readSession(decodeURIComponent(token || ''), env); } catch { return null; }
     if (!id) return null;
-    if (id === SUPER_ID && SUPER_PASSWORD_HASH) return { id, email: SUPER_EMAIL, name: 'lookOn Super Admin', role: 'superadmin', active: true };
+    if (id === SUPER_ID && SUPER_PASSWORD_HASH) return { id, email: SUPER_EMAIL, name: 'lookveya Super Admin', role: 'superadmin', active: true };
     const user = await store.getUser(id);
     return user?.active ? { ...user, role: 'admin' } : null;
   }
@@ -267,7 +267,7 @@ export async function createApp(opts = {}) {
       return { ...record, token: null, status: 'disconnected', disconnectedReason: 'invalid_token', uninstalledAt: Date.now() };
     }
     const token = await tokens.get(shop, record);
-    if (!token) return record; // expired and not refreshable right now: reopening lookOn in Shopify admin renews it
+    if (!token) return record; // expired and not refreshable right now: reopening lookveya in Shopify admin renews it
     try {
       await adminGraphql(f, shop, token, 'query ShopCheck { shop { id } }');
     } catch (e) {
@@ -376,7 +376,7 @@ export async function createApp(opts = {}) {
   });
   app.use(express.json({ limit: '12mb' }));
 
-  // ---------------- lookOn platform panels ----------------
+  // ---------------- lookveya platform panels ----------------
   const panelPath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'public', 'panel.html');
   const embeddedPath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'public', 'embedded.html');
 
@@ -414,7 +414,7 @@ export async function createApp(opts = {}) {
       user = { id, name: identity.email || identity.shop, email: identity.email || '', shop: identity.shop, shopifyStore: identity.shop, shopifyUserId: identity.sub, active: true, createdAt: Date.now(), source: 'shopify_store' };
       await store.putUser(id, user);
     }
-    if (!user.active) throw new Error('This lookOn account is suspended. Contact lookOn support.');
+    if (!user.active) throw new Error('This lookveya account is suspended. Contact lookveya support.');
     return { identity, user, id, shopRecord };
   }
   app.post('/app/api/session', async (req, res) => {
@@ -446,7 +446,7 @@ export async function createApp(opts = {}) {
       const response = { shop: identity.shop, user: { id: user.id, name: user.name, email: user.email }, role: 'admin', syncedProducts };
       if (needsThemeSetup) {
         const themeEditor = new URL(`https://${identity.shop}/admin/themes/current/editor`);
-        // Opens the product template with the lookOn try-on app block added to the main product section.
+        // Opens the product template with the lookveya try-on app block added to the main product section.
         themeEditor.searchParams.set('template', 'product');
         themeEditor.searchParams.set('addAppBlockId', `${API_KEY}/tryon-block`);
         themeEditor.searchParams.set('target', 'mainSection');
@@ -464,7 +464,7 @@ export async function createApp(opts = {}) {
     const shop = req.embedded.identity.shop;
     const record = await store.getShop(shop);
     if (!record || record.status === 'disconnected' || record.ownerId !== req.embedded.id) {
-      res.status(403).json({ error: 'This Shopify store is not connected to your lookOn account.' });
+      res.status(403).json({ error: 'This Shopify store is not connected to your lookveya account.' });
       return null;
     }
     return { shop, record };
@@ -648,11 +648,11 @@ export async function createApp(opts = {}) {
     if (req.query.kind === 'shoppers') {
       const rows = shopperRows(filterEvents(await store.listEvents(own.shop), activityQuery({ ...req.query, status: '', who: '' })), await store.listLeads(own.shop));
       csv = toCsv(rows, [['email', 'Email'], ['customerId', 'Customer ID'], ['visitor', 'Visitor'], ['previews', 'Previews'], ['attempts', 'Attempts'], ['products', 'Products tried'], [(r) => (r.marketing ? 'yes' : 'no'), 'Agreed to emails'], ['country', 'Country'], ['device', 'Device'], [(r) => when(r.firstSeen), 'First seen (UTC)'], [(r) => when(r.lastSeen), 'Last seen (UTC)']]);
-      name = 'lookon-shoppers.csv';
+      name = 'lookveya-shoppers.csv';
     } else {
       const rows = filterEvents(await store.listEvents(own.shop), activityQuery(req.query)).map(eventRow);
       csv = toCsv(rows, [[(r) => when(r.at), 'Time (UTC)'], ['status', 'Result'], ['reason', 'Reason'], ['productTitle', 'Product'], ['variant', 'Variant'], ['category', 'Worn on'], ['shopper', 'Shopper type'], ['email', 'Email'], ['customerId', 'Customer ID'], ['visitor', 'Visitor'], ['device', 'Device'], ['browser', 'Browser'], ['os', 'OS'], ['country', 'Country'], ['credits', 'Credits'], ['seconds', 'Seconds']]);
-      name = 'lookon-try-ons.csv';
+      name = 'lookveya-try-ons.csv';
     }
     res.set('Content-Type', 'text/csv; charset=utf-8').set('Content-Disposition', `attachment; filename="${name}"`).send('\ufeff' + csv);
   });
@@ -1038,7 +1038,7 @@ export async function createApp(opts = {}) {
     const shop = normalizeShop(req.query.shop);
     if (!shop) return res.status(400).send('Invalid shop.');
     const user = await platformUser(req);
-    if (SUPER_PASSWORD_HASH && user?.role !== 'admin') return res.status(401).send('Sign in to your purchaser account before connecting a Shopify store. <a href="/panel">Open the lookOn admin panel</a>.');
+    if (SUPER_PASSWORD_HASH && user?.role !== 'admin') return res.status(401).send('Sign in to your purchaser account before connecting a Shopify store. <a href="/panel">Open the lookveya admin panel</a>.');
     const ownerId = user?.role === 'admin' ? user.id : '';
     const state = makeState(shop, API_SECRET, Date.now(), ownerId);
     res.setHeader('Set-Cookie', `tryon_state=${state}; HttpOnly; Secure; SameSite=Lax; Path=/auth; Max-Age=600`);
@@ -1063,7 +1063,7 @@ export async function createApp(opts = {}) {
       await store.putShop(shop, { ...(oldShop || {}), ...(ownerId ? { ownerId, platformManaged: true } : {}), status: 'installed', disconnectedAt: null, uninstalledAt: null, ...tokenFields(granted, env), installedAt: oldShop?.installedAt || Date.now() });
       syncShop(shop).catch((e) => console.error('[sync]', shop, e.message)); // fill the catalogue in the background
       res.setHeader('Set-Cookie', 'tryon_state=; HttpOnly; Secure; SameSite=Lax; Path=/auth; Max-Age=0');
-      // Open Shopify's theme editor with the lookOn app embed selected.
+      // Open Shopify's theme editor with the lookveya app embed selected.
       // Shopify still requires the merchant to click Save once.
       const themeEditor = new URL(`https://${shop}/admin/themes/current/editor`);
       themeEditor.searchParams.set('template', 'product');

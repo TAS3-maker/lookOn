@@ -132,7 +132,7 @@ test('block: the app block stays where the merchant put it; the embed honours it
   dom.window.close(); await t.close();
 });
 
-test('block: theme editor wording is kept unless the merchant changed that line in the lookOn app', async () => {
+test('block: theme editor wording is kept unless the merchant changed that line in the lookveya app', async () => {
   const t = await boot({ env: { TRYON_ENGINE: 'cloudflare', CF_ACCOUNT_ID: 'a', CF_API_TOKEN: 't' } });
   const theme = { 'block.settings.subheading': 'From the theme', 'block.settings.selfie_label': 'Selfie!', 'block.settings.button_label': 'Upload' };
   const a = await page(t, { handle: 'classic-wool-beanie', settings: theme });
@@ -193,4 +193,17 @@ test('block: when the preview fails the shopper gets plain words and a Try again
   await p.until(() => /offline/.test(p.text()));
   assert.ok(!/Failed to fetch/.test(p.text()));
   p.close(); await t.close();
+});
+
+test('rename: blocks and texts saved with the old name show "lookveya"', async () => {
+  const { renderLiquid } = await import('./helpers.mjs');
+  const { textsFor } = await import('../lib/texts.js');
+  const h = (heading) => /<h3 class="ptn-title"[^>]*>([^<]*)<\/h3>/.exec(renderLiquid(liquid, { 'block.settings.heading': heading }))[1];
+  assert.equal(h('lookOn'), 'lookveya');
+  assert.equal(h(''), 'lookveya');
+  assert.equal(h('Try it on'), 'lookveya');
+  assert.equal(h('See it on you'), 'See it on you');
+  assert.equal(textsFor({ widget: { texts: { heading: 'lookOn' } } }).heading, 'lookveya');
+  assert.equal(textsFor({ tryOnSettings: { heading: 'lookOn' } }).heading, 'lookveya');
+  assert.equal(textsFor({ widget: { texts: { heading: 'Our try-on' } } }).heading, 'Our try-on');
 });

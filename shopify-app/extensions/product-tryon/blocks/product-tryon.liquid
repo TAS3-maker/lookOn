@@ -1,18 +1,18 @@
-{%- comment -%} lookOn try-on app embed: placed automatically next to Add to cart. Use the app block (tryon-block) to place it by hand. {%- endcomment -%}
+{%- comment -%} lookveya try-on app embed: placed automatically next to Add to cart. Use the app block (tryon-block) to place it by hand. {%- endcomment -%}
 {%- if template.name == 'product' -%}
 {%- render 'lookon-tryon', block: block, product: product, placement: 'auto' -%}
 {%- endif -%}
 
 {% schema %}
 {
-  "name": "lookOn try-on (automatic)",
+  "name": "lookveya try-on (automatic)",
   "target": "body",
   "stylesheet": "product-tryon.css",
   "javascript": "product-tryon.js",
   "settings": [
     {
       "type": "paragraph",
-      "content": "For themes where you can't add app blocks. lookOn places itself on product pages at the position below. If you added the lookOn try-on block to the product page, this embed hides itself, so you can leave it off."
+      "content": "For themes where you can't add app blocks. lookveya places itself on product pages at the position below. If you added the lookveya try-on block to the product page, this embed hides itself, so you can leave it off."
     },
     {
       "type": "select",
@@ -42,7 +42,7 @@
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "lookOn"
+      "default": "lookveya"
     },
     {
       "type": "text",

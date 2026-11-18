@@ -1,14 +1,14 @@
 (function () {
   'use strict';
-  // Version stamp: type window.lookOnVersion in the browser console on a product page to see which build the store runs.
-  if (typeof window !== 'undefined') { if (window.lookOnLoaded) return; window.lookOnLoaded = true; window.lookOnVersion = '2.2-blocks'; }
+  // Version stamp: type window.lookveyaVersion in the browser console on a product page to see which build the store runs.
+  if (typeof window !== 'undefined') { if (window.lookveyaLoaded) return; window.lookveyaLoaded = true; window.lookveyaVersion = '2.2-blocks'; }
 
   function el(root, sel) { return root.querySelector(sel); }
 
-  // Default wording; the merchant's own texts (lookOn > Texts in Shopify admin) come from the server and replace these.
+  // Default wording; the merchant's own texts (lookveya > Texts in Shopify admin) come from the server and replace these.
   var DEFAULT_TEXTS = {"heading":"Try it on","subheading":"Add a front-facing photo to see this on you.","chooseButton":"Choose photo to try on {category}","selfieButton":"Take selfie","captureButton":"Capture","cancelButton":"Cancel","consent":"This is a photo of me and I'm 18 or over. I understand it is sent to an AI service to make the preview and is not saved.","privacy":"Previews are AI-made and approximate: colour, size and fit will differ a little from the real product.","consentRequired":"Please tick the box above first.","stillLoading":"One moment, the try-on is still loading.","loadingPhoto":"Loading your photo…","checkingPhoto":"Checking your photo…","generating":"Styling your preview… this can take up to a minute.","loaderLabel":"Creating your preview…","cameraPrompt":"Look at the camera and press Capture.","cameraStarting":"The camera is still starting. Try again in a second.","cameraUnavailable":"The camera is not available. Please use Choose photo instead.","photoUnreadable":"Sorry, that image could not be loaded.","showOriginal":"Show my original photo","showPreview":"Show the preview","previewOption":"Preview this option","download":"Download","keepFace":"Keep my real face exactly as in my photo","resultDone":"AI preview of {product} on you.","resultFaceKept":"AI preview of {product}. Your real face is kept exactly as in your photo; the rest is AI-made.","resultFaceMissing":"AI preview of {product}. We could not find your face in the photo, so the face may differ slightly. A clear, front-facing photo works best.","resultFaceNotAligned":"AI preview of {product}. We could not line your face up exactly, so the plain AI picture is shown.","resultFocus":"AI preview of {product} on you. Only the {area} area is AI-made; the rest is your original photo.","resultFocusMissed":"The AI did not place {product} clearly this time. Please try again, ideally with a sharper, front-facing photo.","tryAnyway":"Try anyway with this photo","noFace":"We could not find a face in that photo. Please use a clear, front-facing photo with your whole face in view.","faceSmall":"Your face looks very small in this photo. Please move closer or use a closer photo.","earsCut":"Your ears are cut off in this photo. Please use a photo that shows both ears.","noNeck":"We cannot see enough of your neck and shoulders. Please use a photo that shows your neck and shoulders.","noHand":"We could not find a hand or wrist in that photo. This product needs a photo of your wrist and hand (a face photo will not work).","wristCut":"Your wrist is cut off in this photo. Please show your whole wrist and hand.","fingersCut":"Your fingers are cut off in this photo. Please show your whole hand with the fingers visible.","outOfCredits":"Try-on is not available right now. Please check back soon.","genericError":"Something went wrong. Please try again.","unavailable":"Try-on is temporarily unavailable."};
-  // Keep the storefront fallback aligned with the lookOn default used by the server and theme extension.
-  DEFAULT_TEXTS.heading = 'lookOn';
+  // Keep the storefront fallback aligned with the lookveya default used by the server and theme extension.
+  DEFAULT_TEXTS.heading = 'lookveya';
   function makeTx(get) {
     return function (key, vars) {
       var all = get() || {}, t = typeof all[key] === 'string' && all[key] ? all[key] : (DEFAULT_TEXTS[key] || '');
@@ -407,7 +407,7 @@
     // Existing theme-editor settings can retain an empty api_url even after the
     // extension schema gets a default. Keep the storefront working without
     // requiring the merchant to edit the block settings manually.
-    var api = (root.dataset.api || 'https://lookonn.vercel.app').replace(/\/$/, '');
+    var api = (root.dataset.api || 'https://api.lookveya.com').replace(/\/$/, '');
     var shop = root.dataset.shop || (window.Shopify && Shopify.shop) || '', handle = root.dataset.handle || '', hint = root.dataset.category || '';
     // Some themes do not expose Shopify.shop to app-embed scripts. The
     // storefront host is still safe to use because the API accepts only
@@ -440,7 +440,7 @@
 
     var info = null;        // what the server says about this product
     var tx = makeTx(function () { return info && info.texts; });
-    // Wording priority: changed in the lookOn app > set in the theme editor (data-theme-text) > lookOn default.
+    // Wording priority: changed in the lookveya app > set in the theme editor (data-theme-text) > lookveya default.
     function applyTexts() {
       var custom = (info && info.textsCustom) || [];
       root.querySelectorAll('[data-t]').forEach(function (n) {
