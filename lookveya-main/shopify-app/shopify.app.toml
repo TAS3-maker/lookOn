@@ -1,0 +1,26 @@
+# lookveya - Shopify app configuration (public app)
+
+client_id = "485f130b0e61166a05b015bf6100bf2f"
+name = "lookveya"
+application_url = "https://api.lookveya.com/app"
+embedded = true
+
+[access_scopes]
+scopes = "read_products"
+
+[auth]
+redirect_urls = [
+  "https://api.lookveya.com/auth/callback",
+  "https://lookonn.vercel.app/auth/callback"
+]
+
+[webhooks]
+api_version = "2026-10"
+
+[[webhooks.subscriptions]]
+topics = ["app/uninstalled", "products/create", "products/update", "products/delete", "app_purchases_one_time/update"]
+uri = "https://api.lookveya.com/webhooks/shopify"
+
+[[webhooks.subscriptions]]
+compliance_topics = ["customers/data_request", "customers/redact", "shop/redact"]
+uri = "https://api.lookveya.com/webhooks/shopify"
